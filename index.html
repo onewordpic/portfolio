@@ -450,6 +450,9 @@ section { padding: 6rem 10%; position: relative; z-index: 2; }
 
 /* ─── BOTTOM CTA ─── */
 .contact-actions { display:flex; gap:1rem; margin-top:2.5rem; flex-wrap:wrap; }
+
+/* ─── UPDATED BOTTOM SECTION ─── */
+.bottom-cta {
   text-align: center;
   padding: 2rem;
   margin: 0 10% 2rem;
@@ -458,7 +461,7 @@ section { padding: 6rem 10%; position: relative; z-index: 2; }
   font-size: 0.9rem;
   position: relative; z-index: 2;
 }
-.bottom-cta a { color: var(--accent2); text-decoration: none; margin-left: 0.4rem; }
+.bottom-cta a { color: var(--accent2); text-decoration: none; margin-left: 0.4rem; transition: 0.3s; }
 .bottom-cta a:hover { color: var(--accent); }
 
 /* ─── FOOTER ─── */
@@ -817,6 +820,7 @@ footer {
 
   </div>
 </section>
+
 <section id="contact">
   <div class="section-label">04 — Contact</div>
   <h2 class="section-title fade">Get in Touch</h2>
@@ -862,8 +866,11 @@ footer {
     <a href="mailto:safwxn@proton.me" class="btn-ghost">Get in Touch</a>
   </div>
 </section>
-  Want to own your data?
-  <a href="mailto:safwxn@proton.me?subject=Homelab Inquiry">Build your own homelab →</a>
+
+<!-- UPDATED BOTTOM SECTION -->
+<div class="bottom-cta fade">
+  Interested in custom infrastructure or hardware optimization? 
+  <a href="mailto:safwxn@proton.me?subject=Technical Inquiry">Let's connect →</a>
 </div>
 
 <footer>© 2026 Safwan Katharudheen</footer>
