@@ -7,7 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* --- CSS VARIABLES (LIGHT & DARK MODE) --- */
         :root {
             --bg: #ffffff;
             --text: #000000;
@@ -18,12 +17,14 @@
             --card-border: rgba(0, 0, 0, 0.05);
             --modal-overlay: rgba(255, 255, 255, 0.4);
             --modal-content-glass: rgba(255, 255, 255, 0.85);
-            --btn-primary-bg: #ffffff;
-            --btn-primary-text: #000000;
+            --btn-bg: #ffffff;
             --contact-bg: #000000;
             --contact-text: #ffffff;
-            --glow-color: radial-gradient(circle, rgba(255, 204, 0, 0.15) 0%, transparent 70%);
+            --glow: radial-gradient(circle, rgba(255, 204, 0, 0.15) 0%, transparent 70%);
             --accent: #ffcc00;
+            --mesh-1: rgba(255, 204, 0, 0.12);
+            --mesh-2: rgba(139, 111, 255, 0.12);
+            --mesh-3: rgba(29, 233, 216, 0.08);
         }
 
         body.dark-theme {
@@ -31,419 +32,138 @@
             --text: #f5f5f7;
             --muted: #a1a1aa;
             --nav-bg: rgba(255, 255, 255, 0.1);
-            --nav-text: #ffffff;
             --card-bg: rgba(255, 255, 255, 0.03);
             --card-border: rgba(255, 255, 255, 0.08);
             --modal-overlay: rgba(0, 0, 0, 0.6);
             --modal-content-glass: rgba(18, 18, 20, 0.85);
             --contact-bg: #050505;
-            --contact-text: #f5f5f7;
-            --glow-color: radial-gradient(circle, rgba(255, 204, 0, 0.08) 0%, transparent 70%);
+            --glow: radial-gradient(circle, rgba(255, 204, 0, 0.08) 0%, transparent 70%);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; scroll-padding-top: 100px; }
-
+        
         body {
             font-family: 'Sora', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.5;
-            overflow-x: hidden;
-            transition: background-color 0.4s ease, color 0.4s ease;
+            background: var(--bg); color: var(--text);
+            line-height: 1.5; overflow-x: hidden;
+            transition: background 0.4s ease, color 0.4s ease;
         }
 
-        /* --- CURSOR GLOW --- */
         .cursor-glow {
-            position: fixed;
-            top: 0; left: 0;
+            position: fixed; top: 0; left: 0;
             width: 600px; height: 600px;
-            background: var(--glow-color);
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            z-index: 9999;
+            background: var(--glow); border-radius: 50%;
+            pointer-events: none; z-index: 9999;
             will-change: transform;
+            transform: translate(-50%, -50%); /* Hidden initially */
         }
 
-        /* --- NAVIGATION --- */
         nav {
-            position: fixed;
-            top: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            background-color: var(--nav-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 8px 12px;
-            border-radius: 999px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: background-color 0.4s ease;
+            position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+            z-index: 1000; background: var(--nav-bg);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: 8px 12px; border-radius: 999px; display: flex; align-items: center; gap: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.4s ease;
         }
-
-        nav a {
-            color: var(--nav-text);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            padding: 8px 16px;
-            border-radius: 999px;
-            transition: background-color 0.3s;
-            cursor: pointer;
-        }
-
-        nav a:hover { background-color: rgba(255, 255, 255, 0.15); }
-
-        .theme-toggle {
-            background: none; border: none; color: var(--nav-text);
-            padding: 8px; margin-left: 8px; cursor: pointer;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            transition: transform 0.3s;
-        }
+        nav a { color: var(--nav-text); text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 8px 16px; border-radius: 999px; transition: background 0.3s; cursor: pointer; }
+        nav a:hover { background: rgba(255, 255, 255, 0.15); }
+        .theme-toggle { background: none; border: none; color: var(--nav-text); padding: 8px; margin-left: 8px; cursor: pointer; border-radius: 50%; transition: transform 0.3s; }
         .theme-toggle:hover { transform: rotate(15deg) scale(1.1); }
         .theme-toggle svg { width: 18px; height: 18px; fill: currentColor; }
 
-        /* --- MESH GRADIENT HERO --- */
         .hero {
-            min-height: 100vh;
-            min-height: 100dvh; /* Fix for Safari mobile bottom bar */
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 0 8% 10vh;
-            position: relative;
-            background-color: var(--bg);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(255, 204, 0, 0.12) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(139, 111, 255, 0.12) 0px, transparent 50%),
-                radial-gradient(at 50% 100%, rgba(29, 233, 216, 0.08) 0px, transparent 50%);
+            min-height: 100vh; min-height: 100dvh; width: 100%;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 0 8% 10vh; position: relative;
+            background: var(--bg) radial-gradient(at 0% 0%, var(--mesh-1) 0px, transparent 50%), radial-gradient(at 100% 0%, var(--mesh-2) 0px, transparent 50%), radial-gradient(at 50% 100%, var(--mesh-3) 0px, transparent 50%);
             background-size: 200% 200%;
-            animation: mesh-drift 12s ease infinite alternate;
-            transition: background-color 0.4s ease;
+            animation: mesh 12s ease infinite alternate; transition: background 0.4s ease;
         }
+        @keyframes mesh { 0% { background-position: 0% 0%; } 100% { background-position: 15% 15%; } }
 
-        @keyframes mesh-drift {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 15% 15%; }
-        }
+        .hero-sub { font-size: clamp(1.2rem, 2.5vw, 2rem); color: var(--muted); margin-bottom: 1.5rem; letter-spacing: -0.02em; max-width: 800px; }
+        .hero h1 { font-size: clamp(4rem, 13vw, 11rem); font-weight: 800; letter-spacing: -0.05em; line-height: 0.85; margin-left: -0.05em; }
 
-        .hero-sub {
-            font-size: clamp(1.2rem, 2.5vw, 2rem);
-            color: var(--muted);
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.02em;
-            max-width: 800px;
-        }
-
-        .hero h1 {
-            font-size: clamp(4rem, 13vw, 11rem);
-            font-weight: 800;
-            letter-spacing: -0.05em;
-            line-height: 0.85;
-            margin-left: -0.05em;
-        }
-
-        /* --- SCROLL REVEAL --- */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* --- SECTIONS --- */
         section { padding: 120px 8%; position: relative; z-index: 10; }
-
         .section-header { margin-bottom: 60px; }
+        .section-label { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; display: block; letter-spacing: 0.05em; }
+        .section-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; letter-spacing: -0.03em; }
 
-        .section-label {
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 10px;
-            display: block;
-            letter-spacing: 0.05em;
-        }
-
-        .section-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 700;
-            letter-spacing: -0.03em;
-        }
-
-        /* --- TACTILE MICRO-INTERACTION CARDS --- */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            perspective: 1000px;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            padding: 40px;
-            border-radius: 32px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--card-border);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-                        box-shadow 0.4s ease, border-color 0.4s ease, background-color 0.4s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-8px) rotateX(2deg) rotateY(-2deg);
-            border-color: var(--accent);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .card h3 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            letter-spacing: -0.02em;
-        }
-
-        .card p {
-            color: var(--muted);
-            font-size: 1.1rem;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; perspective: 1000px; }
+        .card { background: var(--card-bg); padding: 40px; border-radius: 32px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--card-border); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease, background 0.4s ease; }
+        .card:hover { transform: translateY(-8px) rotateX(2deg) rotateY(-2deg); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .card h3 { font-size: 1.8rem; font-weight: 700; margin-bottom: 15px; letter-spacing: -0.02em; }
+        .card p { color: var(--muted); font-size: 1.1rem; margin-bottom: 25px; line-height: 1.6; }
+        
         .tag-container { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 8px 16px; border-radius: 999px; font-size: 0.85rem; font-weight: 600; border: 1px solid var(--muted); opacity: 0.8; transition: color 0.4s ease; }
 
-        .tag {
-            background-color: transparent;
-            padding: 8px 16px;
-            border-radius: 999px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text);
-            border: 1px solid var(--muted);
-            opacity: 0.8;
-            transition: color 0.4s ease;
-        }
-
-        /* --- GLASSMORPHISM MODAL WINDOWS --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: var(--modal-overlay);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            z-index: 2000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease, background-color 0.4s ease;
-            padding: 20px;
-        }
-
+        .modal-overlay { position: fixed; inset: 0; background: var(--modal-overlay); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 2000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease, background 0.4s ease; padding: 20px; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-
-        .modal-container {
-            background: var(--modal-content-glass);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            width: 100%;
-            max-width: 1100px;
-            max-height: 85vh;
-            overflow-y: auto;
-            border-radius: 32px;
-            padding: 60px;
-            box-shadow: 0 24px 60px rgba(0,0,0,0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transform: translateY(20px) scale(0.98);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease;
-            position: relative;
-        }
-
+        .modal-container { background: var(--modal-content-glass); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); width: 100%; max-width: 1100px; max-height: 85vh; overflow-y: auto; border-radius: 32px; padding: 60px; box-shadow: 0 24px 60px rgba(0,0,0,0.2); border: 1px solid rgba(255, 255, 255, 0.1); transform: translateY(20px) scale(0.98); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s ease; }
         .modal-overlay.active .modal-container { transform: translateY(0) scale(1); }
-
-        .modal-close {
-            position: absolute;
-            top: 30px; right: 30px;
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            width: 44px; height: 44px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex; justify-content: center; align-items: center;
-            transition: background-color 0.2s;
-            color: var(--text);
-        }
-        .modal-close:hover { filter: brightness(0.9); }
-
-        .modal-container .section-header { margin-bottom: 40px; }
-        .modal-container .card { background-color: transparent; }
+        .modal-close { position: absolute; top: 30px; right: 30px; background: var(--card-bg); border: 1px solid var(--card-border); width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; color: var(--text); }
         
         .modal-container::-webkit-scrollbar { width: 8px; }
-        .modal-container::-webkit-scrollbar-track { background-color: transparent; }
-        .modal-container::-webkit-scrollbar-thumb { background-color: var(--muted); border-radius: 10px; opacity: 0.5; }
+        .modal-container::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 10px; opacity: 0.5; }
 
-        /* --- CONTACT SECTION --- */
-        #contact {
-            background-color: var(--contact-bg);
-            color: var(--contact-text);
-            padding: 150px 8%;
-            text-align: center;
-            transition: background-color 0.4s ease, color 0.4s ease;
-        }
-
-        .status-ping {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--muted);
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 10px;
-        }
-        .ping-dot {
-            width: 10px; height: 10px;
-            background-color: #22c55e;
-            border-radius: 50%;
-            margin-right: 10px;
-            position: relative;
-        }
-        .ping-dot::after {
-            content: '';
-            position: absolute;
-            width: 100%; height: 100%;
-            top: 0; left: 0;
-            border-radius: 50%;
-            background-color: #22c55e;
-            animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-        }
+        #contact { background: var(--contact-bg); color: var(--contact-text); padding: 150px 8%; text-align: center; transition: background 0.4s ease, color 0.4s ease; }
+        .status-ping { display: inline-flex; align-items: center; color: var(--muted); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+        .ping-dot { width: 10px; height: 10px; background: #22c55e; border-radius: 50%; margin-right: 10px; position: relative; }
+        .ping-dot::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: #22c55e; animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite; }
         @keyframes ping { 75%, 100% { transform: scale(2.5); opacity: 0; } }
 
-        .contact-title {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 800;
-            letter-spacing: -0.04em;
-            margin-bottom: 50px;
-        }
+        .contact-title { font-size: clamp(3rem, 8vw, 6rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 50px; }
+        .contact-actions { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .btn-primary, .btn-secondary { display: inline-block; padding: 20px 40px; border-radius: 999px; text-decoration: none; font-size: 1.2rem; font-weight: 700; transition: transform 0.2s; }
+        .btn-primary { background: var(--btn-bg); color: #000; }
+        .btn-secondary { border: 1px solid rgba(255,255,255,0.2); color: var(--contact-text); }
+        .btn-primary:hover, .btn-secondary:hover { transform: scale(1.03); }
+        
+        .resume-link { display: inline-block; margin-top: 35px; color: var(--muted); text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        .resume-link:hover { color: var(--contact-text); }
 
-        .contact-actions {
-            display: flex; flex-direction: row; justify-content: center; gap: 20px; flex-wrap: wrap;
-        }
+        footer { background: var(--contact-bg); padding: 0 8% 60px; text-align: center; color: var(--muted); font-size: 0.9rem; transition: background 0.4s ease; }
 
-        .btn-primary {
-            display: inline-block;
-            background-color: var(--btn-primary-bg);
-            color: var(--btn-primary-text);
-            padding: 20px 40px;
-            border-radius: 999px;
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: 700;
-            transition: transform 0.2s;
-        }
-        .btn-primary:hover { transform: scale(1.03); }
-
-        .btn-secondary {
-            display: inline-block;
-            background-color: transparent;
-            color: var(--contact-text);
-            padding: 20px 40px;
-            border-radius: 999px;
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: 700;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: transform 0.2s, background-color 0.2s;
-        }
-        .btn-secondary:hover { background-color: rgba(255,255,255,0.1); transform: scale(1.03); }
-
-        .resume-link {
-            display: inline-block;
-            margin-top: 35px;
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 1.05rem;
-            font-weight: 600;
-            border-bottom: 1px solid transparent;
-            transition: color 0.3s, border-bottom-color 0.3s;
-        }
-        .resume-link:hover { color: var(--contact-text); border-bottom-color: var(--contact-text); }
-
-        footer {
-            background-color: var(--contact-bg);
-            padding: 0 8% 60px;
-            text-align: center;
-            color: var(--muted);
-            font-size: 0.9rem;
-            transition: background-color 0.4s ease;
-        }
-
-        /* --- RESPONSIVE MOBILE FIXES --- */
         @media (max-width: 768px) {
-            .hero { 
-                justify-content: center; /* Fixes mobile dead space */
-                padding-top: 120px; 
-                padding-bottom: 60px; 
-            }
-            .hero h1 {
-                font-size: clamp(3.5rem, 16vw, 6rem); /* Perfect scaling for mobile */
-            }
-            .hero-sub {
-                font-size: 1.1rem;
-                margin-bottom: 1rem;
-            }
+            .hero { justify-content: center; padding-top: 120px; padding-bottom: 60px; }
+            .hero h1 { font-size: clamp(3.5rem, 16vw, 6rem); }
             .grid { grid-template-columns: 1fr; }
             nav { width: 92%; justify-content: space-around; top: 15px; }
             nav a { padding: 8px 10px; font-size: 0.75rem; }
-            .theme-toggle { padding: 4px; margin-left: 0; }
             .card { padding: 30px; }
             .contact-actions { flex-direction: column; }
             .btn-primary, .btn-secondary { width: 100%; }
             .modal-container { padding: 40px 20px; }
             .modal-close { top: 15px; right: 15px; }
-            .cursor-glow { display: none; } /* Disabled on mobile for performance */
+            .cursor-glow { display: none; } 
         }
     </style>
 </head>
 <body>
 
-    <!-- CURSOR GLOW -->
     <div class="cursor-glow" id="cursorGlow"></div>
 
-    <!-- NAVIGATION -->
     <nav>
         <a href="#work">Work</a>
-        <a onclick="openWindow('infraWindow')">Infra</a>
-        <a onclick="openWindow('skillsWindow')">Skills</a>
+        <a onclick="toggleModal('infraWindow')">Infra</a>
+        <a onclick="toggleModal('skillsWindow')">Skills</a>
         <a href="#contact">Contact</a>
-        
-        <!-- THEME TOGGLE ICON -->
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle Theme">
-            <svg id="themeIcon" viewBox="0 0 24 24">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
+            <svg id="themeIcon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
         </button>
     </nav>
 
-    <!-- HERO -->
     <div class="hero">
-        <div class="hero-sub reveal">
-            Open to Strategic IT & Infrastructure Opportunities. Building reliable systems from bare metal up.
-        </div>
+        <div class="hero-sub reveal">Open to Strategic IT & Infrastructure Opportunities. Building reliable systems from bare metal up.</div>
         <h1 class="reveal">Safwan<br>Katharudheen</h1>
     </div>
 
-    <!-- EXPERIENCE SECTION -->
     <section id="work">
         <div class="section-header reveal">
             <span class="section-label">01 — Experience</span>
@@ -453,196 +173,126 @@
             <div class="card reveal">
                 <h3>Performance Builds</h3>
                 <p>Designed and assembled high-performance workstations and gaming rigs with BIOS-level tuning and thermal optimization.</p>
-                <div class="tag-container">
-                    <span class="tag">Ryzen 9</span> <span class="tag">RTX 40-series</span> <span class="tag">DDR5</span>
-                </div>
+                <div class="tag-container"><span class="tag">Ryzen 9</span> <span class="tag">RTX 40-series</span> <span class="tag">DDR5</span></div>
             </div>
             <div class="card reveal">
                 <h3>Elite Rigs</h3>
                 <p>Founded and ran a custom PC and homelab business, completing 20–30 bespoke builds for professional clients.</p>
-                <div class="tag-container">
-                    <span class="tag">Entrepreneurship</span> <span class="tag">Procurement</span> <span class="tag">System Design</span>
-                </div>
+                <div class="tag-container"><span class="tag">Entrepreneurship</span> <span class="tag">Procurement</span> <span class="tag">System Design</span></div>
             </div>
         </div>
     </section>
 
-    <!-- INFRASTRUCTURE WINDOW -->
-    <div id="infraWindow" class="modal-overlay" onclick="closeWindow('infraWindow', event)">
+    <div id="infraWindow" class="modal-overlay" onclick="toggleModal('infraWindow', event)">
         <div class="modal-container">
-            <button class="modal-close" onclick="closeWindow('infraWindow')">✕</button>
+            <button class="modal-close" onclick="toggleModal('infraWindow')">✕</button>
             <div class="section-header">
                 <span class="section-label">02 — Infrastructure</span>
                 <h2 class="section-title">Self-Hosted Stack</h2>
             </div>
             <div class="grid">
-                <div class="card">
+                <div class="card" style="background:transparent;">
                     <h3>Private Media</h3>
-                    <p>Jellyfin on Proxmox LXC backed by 20TB TrueNAS SCALE. Remote access via Tailscale with zero buffering.</p>
-                    <div class="tag-container">
-                        <span class="tag">Proxmox</span> <span class="tag">TrueNAS</span> <span class="tag">ZFS</span>
-                    </div>
+                    <p>Jellyfin on Proxmox LXC backed by 20TB TrueNAS SCALE. Remote access via Tailscale.</p>
+                    <div class="tag-container"><span class="tag">Proxmox</span> <span class="tag">TrueNAS</span> <span class="tag">ZFS</span></div>
                 </div>
-                <div class="card">
+                <div class="card" style="background:transparent;">
                     <h3>Network Edge</h3>
-                    <p>Configured pfSense with VLAN segmentation, WireGuard tunnels, and DNS-level tracker blocking.</p>
-                    <div class="tag-container">
-                        <span class="tag">pfSense</span> <span class="tag">VLANs</span> <span class="tag">WireGuard</span>
-                    </div>
+                    <p>Configured pfSense with VLAN segmentation, WireGuard tunnels, and DNS-level blocking.</p>
+                    <div class="tag-container"><span class="tag">pfSense</span> <span class="tag">VLANs</span> <span class="tag">WireGuard</span></div>
                 </div>
-                <div class="card">
+                <div class="card" style="background:transparent;">
                     <h3>Observability Stack</h3>
-                    <p>Comprehensive infrastructure monitoring featuring custom Grafana dashboards and automated downtime alerting.</p>
-                    <div class="tag-container">
-                        <span class="tag">Grafana</span> <span class="tag">Prometheus</span> <span class="tag">Uptime Kuma</span>
-                    </div>
+                    <p>Infrastructure monitoring featuring custom Grafana dashboards and automated alerting.</p>
+                    <div class="tag-container"><span class="tag">Grafana</span> <span class="tag">Prometheus</span> <span class="tag">Uptime Kuma</span></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SKILLS WINDOW -->
-    <div id="skillsWindow" class="modal-overlay" onclick="closeWindow('skillsWindow', event)">
+    <div id="skillsWindow" class="modal-overlay" onclick="toggleModal('skillsWindow', event)">
         <div class="modal-container">
-            <button class="modal-close" onclick="closeWindow('skillsWindow')">✕</button>
+            <button class="modal-close" onclick="toggleModal('skillsWindow')">✕</button>
             <div class="section-header">
                 <span class="section-label">03 — Expertise</span>
                 <h2 class="section-title">Technical Skills</h2>
             </div>
             <div class="grid">
-                <div class="card">
+                <div class="card" style="background:transparent;">
                     <h3 style="font-size: 1.2rem; text-transform: uppercase; color: var(--accent); letter-spacing: 0.05em;">Virtualization</h3>
-                    <div class="tag-container" style="margin-top: 15px;">
-                        <span class="tag">Proxmox VE</span> <span class="tag">VMware ESXi</span>
-                        <span class="tag">LXC</span> <span class="tag">KVM</span> <span class="tag">Docker</span>
-                    </div>
+                    <div class="tag-container"><span class="tag">Proxmox VE</span> <span class="tag">VMware ESXi</span> <span class="tag">LXC</span> <span class="tag">KVM</span> <span class="tag">Docker</span></div>
                 </div>
-                <div class="card">
+                <div class="card" style="background:transparent;">
                     <h3 style="font-size: 1.2rem; text-transform: uppercase; color: var(--accent); letter-spacing: 0.05em;">Storage & NAS</h3>
-                    <div class="tag-container" style="margin-top: 15px;">
-                        <span class="tag">TrueNAS</span> <span class="tag">Unraid</span> <span class="tag">ZFS</span>
-                        <span class="tag">RAID</span> <span class="tag">SMB/NFS</span>
-                    </div>
+                    <div class="tag-container"><span class="tag">TrueNAS</span> <span class="tag">Unraid</span> <span class="tag">ZFS</span> <span class="tag">RAID</span> <span class="tag">SMB/NFS</span></div>
                 </div>
-                <div class="card">
+                <div class="card" style="background:transparent;">
                     <h3 style="font-size: 1.2rem; text-transform: uppercase; color: var(--accent); letter-spacing: 0.05em;">Networking</h3>
-                    <div class="tag-container" style="margin-top: 15px;">
-                        <span class="tag">pfSense</span> <span class="tag">Tailscale</span> <span class="tag">VLANs</span>
-                        <span class="tag">Nginx</span> <span class="tag">DNS/DHCP</span>
-                    </div>
+                    <div class="tag-container"><span class="tag">pfSense</span> <span class="tag">Tailscale</span> <span class="tag">VLANs</span> <span class="tag">Nginx</span> <span class="tag">DNS/DHCP</span></div>
                 </div>
-                <div class="card">
+                <div class="card" style="background:transparent;">
                     <h3 style="font-size: 1.2rem; text-transform: uppercase; color: var(--accent); letter-spacing: 0.05em;">Self-Hosted Apps</h3>
-                    <div class="tag-container" style="margin-top: 15px;">
-                        <span class="tag">Jellyfin</span> <span class="tag">Nextcloud</span> <span class="tag">Immich</span>
-                        <span class="tag">Vaultwarden</span> <span class="tag">Uptime Kuma</span>
-                    </div>
+                    <div class="tag-container"><span class="tag">Jellyfin</span> <span class="tag">Nextcloud</span> <span class="tag">Immich</span> <span class="tag">Vaultwarden</span> <span class="tag">Uptime Kuma</span></div>
                 </div>
-                <div class="card">
+                <div class="card" style="background:transparent;">
                     <h3 style="font-size: 1.2rem; text-transform: uppercase; color: var(--accent); letter-spacing: 0.05em;">Systems</h3>
-                    <div class="tag-container" style="margin-top: 15px;">
-                        <span class="tag">Linux (Debian)</span> <span class="tag">Ubuntu Server</span>
-                        <span class="tag">Windows Server</span> <span class="tag">Active Directory</span>
-                    </div>
+                    <div class="tag-container"><span class="tag">Linux (Debian)</span> <span class="tag">Ubuntu Server</span> <span class="tag">Windows Server</span> <span class="tag">Active Directory</span></div>
                 </div>
-                <div class="card">
+                <div class="card" style="background:transparent;">
                     <h3 style="font-size: 1.2rem; text-transform: uppercase; color: var(--accent); letter-spacing: 0.05em;">Hardware</h3>
-                    <div class="tag-container" style="margin-top: 15px;">
-                        <span class="tag">PC Building</span> <span class="tag">Thermal Design</span>
-                        <span class="tag">BIOS Tuning</span> <span class="tag">Server Rack</span> <span class="tag">UPS/PDU</span>
-                    </div>
+                    <div class="tag-container"><span class="tag">PC Building</span> <span class="tag">Thermal Design</span> <span class="tag">BIOS Tuning</span> <span class="tag">Server Rack</span> <span class="tag">UPS/PDU</span></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- CONTACT SECTION -->
     <section id="contact">
-        <div class="contact-content">
-            <div class="status-ping reveal">
-                <span class="ping-dot"></span> Available for new projects
-            </div>
-            <h2 class="contact-title reveal">Let's build something reliable.</h2>
-            <div class="contact-actions reveal">
-                <a href="https://wa.me/917012304907" target="_blank" class="btn-primary">Message</a>
-                <a href="tel:+917012304907" class="btn-secondary">Call Now</a>
-            </div>
-            <a href="mailto:safwxn@proton.me?subject=Resume%20Request%20-%20Safwan%20Katharudheen&body=Hi%20Safwan,%0D%0A%0D%0AI%20was%20reviewing%20your%20portfolio%20and%20would%20love%20to%20request%20a%20copy%20of%20your%20latest%20resume.%0D%0A%0D%0AThanks!" class="resume-link reveal">Request Resume via Email →</a>
+        <div class="status-ping reveal"><span class="ping-dot"></span> Available for new projects</div>
+        <h2 class="contact-title reveal">Let's build something reliable.</h2>
+        <div class="contact-actions reveal">
+            <a href="https://wa.me/917012304907" target="_blank" class="btn-primary">Message</a>
+            <a href="tel:+917012304907" class="btn-secondary">Call Now</a>
         </div>
+        <a href="mailto:safwxn@proton.me?subject=Resume%20Request" class="resume-link reveal">Request Resume via Email →</a>
     </section>
 
-    <footer>
-        &copy; 2026 Safwan Katharudheen. <br>
-        Built with focus on performance and privacy.
-    </footer>
+    <footer>&copy; 2026 Safwan Katharudheen. <br>Built with focus on performance and privacy.</footer>
 
-    <!-- JAVASCRIPT FOR INTERACTIVITY -->
     <script>
-        // 1. CURSOR GLOW LOGIC
-        const cursorGlow = document.getElementById('cursorGlow');
-        document.addEventListener('mousemove', (e) => {
-            cursorGlow.style.left = e.clientX + 'px';
-            cursorGlow.style.top = e.clientY + 'px';
+        // Optimized Cursor Glow
+        const glow = document.getElementById('cursorGlow');
+        document.addEventListener('mousemove', e => glow.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`);
+
+        // Consolidated Modal Logic
+        const toggleModal = (id, e) => {
+            if (e && e.target !== document.getElementById(id)) return;
+            const el = document.getElementById(id);
+            const isActive = el.classList.toggle('active');
+            document.body.style.overflow = isActive ? 'hidden' : '';
+        };
+        document.addEventListener('keydown', e => {
+            if (e.key === "Escape") { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active')); document.body.style.overflow = ''; }
         });
 
-        // 2. MODAL WINDOW LOGIC
-        function openWindow(windowId) {
-            document.getElementById(windowId).classList.add('active');
-            document.body.style.overflow = 'hidden'; 
-        }
-        function closeWindow(windowId, event) {
-            if (event && event.target !== document.getElementById(windowId)) return;
-            document.getElementById(windowId).classList.remove('active');
-            document.body.style.overflow = ''; 
-        }
-        document.addEventListener('keydown', function(event) {
-            if (event.key === "Escape") {
-                document.querySelectorAll('.modal-overlay.active').forEach(modal => modal.classList.remove('active'));
-                document.body.style.overflow = '';
-            }
+        // Minified Scroll Reveal
+        const reveal = () => document.querySelectorAll(".reveal").forEach(el => {
+            if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add("active");
         });
+        window.addEventListener("scroll", reveal); reveal();
 
-        // 3. SCROLL REVEAL LOGIC
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = 100;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add("active");
-                }
-            }
-        }
-        window.addEventListener("scroll", reveal);
-        reveal(); 
-
-        // 4. DARK/LIGHT MODE TOGGLE LOGIC
-        const themeToggleBtn = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-        
-        if(localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-theme');
-            setSunIcon();
-        }
-
-        themeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-theme');
-            if(document.body.classList.contains('dark-theme')) {
-                localStorage.setItem('theme', 'dark');
-                setSunIcon();
-            } else {
-                localStorage.setItem('theme', 'light');
-                setMoonIcon();
-            }
-        });
-
-        function setSunIcon() {
-            themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
-        }
-        function setMoonIcon() {
-            themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-        }
+        // Optimized Theme Toggle
+        const themeBtn = document.getElementById('themeToggle'), themeIcon = document.getElementById('themeIcon');
+        const svgs = {
+            sun: '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>',
+            moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>'
+        };
+        const setTheme = isDark => {
+            document.body.classList.toggle('dark-theme', isDark);
+            themeIcon.innerHTML = isDark ? svgs.sun : svgs.moon;
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        };
+        if (localStorage.getItem('theme') === 'dark') setTheme(true);
+        themeBtn.addEventListener('click', () => setTheme(!document.body.classList.contains('dark-theme')));
     </script>
 </body>
 </html>
