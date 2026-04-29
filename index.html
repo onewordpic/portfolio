@@ -110,7 +110,8 @@
 
         /* --- MESH GRADIENT HERO --- */
         .hero {
-            height: 100vh;
+            min-height: 100vh;
+            min-height: 100dvh; /* Fix for Safari mobile bottom bar */
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -182,7 +183,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
-            perspective: 1000px; /* Helps with 3D tilt */
+            perspective: 1000px;
         }
 
         .card {
@@ -284,7 +285,7 @@
         .modal-close:hover { filter: brightness(0.9); }
 
         .modal-container .section-header { margin-bottom: 40px; }
-        .modal-container .card { background-color: transparent; } /* Cards inside glass modal should be transparent */
+        .modal-container .card { background-color: transparent; }
         
         .modal-container::-webkit-scrollbar { width: 8px; }
         .modal-container::-webkit-scrollbar-track { background-color: transparent; }
@@ -387,9 +388,20 @@
             transition: background-color 0.4s ease;
         }
 
-        /* --- RESPONSIVE --- */
+        /* --- RESPONSIVE MOBILE FIXES --- */
         @media (max-width: 768px) {
-            .hero { padding-bottom: 5vh; }
+            .hero { 
+                justify-content: center; /* Fixes mobile dead space */
+                padding-top: 120px; 
+                padding-bottom: 60px; 
+            }
+            .hero h1 {
+                font-size: clamp(3.5rem, 16vw, 6rem); /* Perfect scaling for mobile */
+            }
+            .hero-sub {
+                font-size: 1.1rem;
+                margin-bottom: 1rem;
+            }
             .grid { grid-template-columns: 1fr; }
             nav { width: 92%; justify-content: space-around; top: 15px; }
             nav a { padding: 8px 10px; font-size: 0.75rem; }
@@ -399,7 +411,7 @@
             .btn-primary, .btn-secondary { width: 100%; }
             .modal-container { padding: 40px 20px; }
             .modal-close { top: 15px; right: 15px; }
-            .cursor-glow { display: none; }
+            .cursor-glow { display: none; } /* Disabled on mobile for performance */
         }
     </style>
 </head>
@@ -495,28 +507,49 @@
             <button class="modal-close" onclick="closeWindow('skillsWindow')">✕</button>
             <div class="section-header">
                 <span class="section-label">03 — Expertise</span>
-                <h2 class="section-title">Technical Stack</h2>
+                <h2 class="section-title">Technical Skills</h2>
             </div>
             <div class="grid">
                 <div class="card">
-                    <h3>Virtualization</h3>
-                    <div class="tag-container">
-                        <span class="tag">Proxmox</span> <span class="tag">Docker</span>
-                        <span class="tag">LXC</span> <span class="tag">KVM</span> <span class="tag">ESXi</span>
+                    <h3 style="font-size: 1.2rem; text-transform: uppercase; color: var(--accent); letter-spacing: 0.05em;">Virtualization</h3>
+                    <div class="tag-container" style="margin-top: 15px;">
+                        <span class="tag">Proxmox VE</span> <span class="tag">VMware ESXi</span>
+                        <span class="tag">LXC</span> <span class="tag">KVM</span> <span class="tag">Docker</span>
                     </div>
                 </div>
                 <div class="card">
-                    <h3>Networking</h3>
-                    <div class="tag-container">
-                        <span class="tag">pfSense</span> <span class="tag">Tailscale</span>
-                        <span class="tag">VLANs</span> <span class="tag">Nginx</span> <span class="tag">WireGuard</span>
+                    <h3 style="font-size: 1.2rem; text-transform: uppercase; color: var(--accent); letter-spacing: 0.05em;">Storage & NAS</h3>
+                    <div class="tag-container" style="margin-top: 15px;">
+                        <span class="tag">TrueNAS</span> <span class="tag">Unraid</span> <span class="tag">ZFS</span>
+                        <span class="tag">RAID</span> <span class="tag">SMB/NFS</span>
                     </div>
                 </div>
                 <div class="card">
-                    <h3>Storage</h3>
-                    <div class="tag-container">
-                        <span class="tag">TrueNAS</span> <span class="tag">ZFS</span>
-                        <span class="tag">Unraid</span> <span class="tag">SMB/NFS</span>
+                    <h3 style="font-size: 1.2rem; text-transform: uppercase; color: var(--accent); letter-spacing: 0.05em;">Networking</h3>
+                    <div class="tag-container" style="margin-top: 15px;">
+                        <span class="tag">pfSense</span> <span class="tag">Tailscale</span> <span class="tag">VLANs</span>
+                        <span class="tag">Nginx</span> <span class="tag">DNS/DHCP</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 1.2rem; text-transform: uppercase; color: var(--accent); letter-spacing: 0.05em;">Self-Hosted Apps</h3>
+                    <div class="tag-container" style="margin-top: 15px;">
+                        <span class="tag">Jellyfin</span> <span class="tag">Nextcloud</span> <span class="tag">Immich</span>
+                        <span class="tag">Vaultwarden</span> <span class="tag">Uptime Kuma</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 1.2rem; text-transform: uppercase; color: var(--accent); letter-spacing: 0.05em;">Systems</h3>
+                    <div class="tag-container" style="margin-top: 15px;">
+                        <span class="tag">Linux (Debian)</span> <span class="tag">Ubuntu Server</span>
+                        <span class="tag">Windows Server</span> <span class="tag">Active Directory</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 1.2rem; text-transform: uppercase; color: var(--accent); letter-spacing: 0.05em;">Hardware</h3>
+                    <div class="tag-container" style="margin-top: 15px;">
+                        <span class="tag">PC Building</span> <span class="tag">Thermal Design</span>
+                        <span class="tag">BIOS Tuning</span> <span class="tag">Server Rack</span> <span class="tag">UPS/PDU</span>
                     </div>
                 </div>
             </div>
