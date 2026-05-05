@@ -50,23 +50,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #ffffff;
-            --text: #000000;
-            --muted: #6e6e73;
-            --nav-bg: rgba(0, 0, 0, 0.85);
+            --bg: #f5f0e8;
+            --text: #1a1612;
+            --muted: #6e6560;
+            --nav-bg: rgba(20, 16, 10, 0.88);
             --nav-text: #ffffff;
-            --card-bg: rgba(245, 245, 247, 0.7);
-            --card-border: rgba(0, 0, 0, 0.05);
-            --modal-overlay: rgba(255, 255, 255, 0.4);
-            --modal-content-glass: rgba(255, 255, 255, 0.85);
-            --btn-bg: #ffffff;
-            --contact-bg: #000000;
-            --contact-text: #ffffff;
-            --glow: radial-gradient(circle, rgba(255, 204, 0, 0.15) 0%, transparent 70%);
-            --accent: #ffcc00;
-            --mesh-1: rgba(255, 204, 0, 0.12);
-            --mesh-2: rgba(139, 111, 255, 0.12);
-            --mesh-3: rgba(29, 233, 216, 0.08);
+            --card-bg: rgba(255, 252, 245, 0.75);
+            --card-border: rgba(26, 22, 18, 0.08);
+            --modal-overlay: rgba(245, 240, 232, 0.5);
+            --modal-content-glass: rgba(255, 252, 245, 0.92);
+            --btn-bg: #1a1612;
+            --contact-bg: #1a1612;
+            --contact-text: #f5f0e8;
+            --glow: radial-gradient(circle, rgba(255, 180, 0, 0.18) 0%, transparent 70%);
+            --accent: #e6a800;
+            --mesh-1: rgba(255, 190, 0, 0.14);
+            --mesh-2: rgba(139, 111, 255, 0.10);
+            --mesh-3: rgba(29, 233, 216, 0.07);
         }
 
         body.dark-theme {
@@ -118,11 +118,11 @@
         .hero {
             min-height: 100vh; min-height: 100dvh; width: 100%;
             display: flex; flex-direction: column; justify-content: flex-end;
-            padding: 0 8% 10vh; position: relative;
-            background: var(--bg) radial-gradient(at 0% 0%, var(--mesh-1) 0px, transparent 50%), radial-gradient(at 100% 0%, var(--mesh-2) 0px, transparent 50%), radial-gradient(at 50% 100%, var(--mesh-3) 0px, transparent 50%);
-            background-size: 200% 200%;
-            animation: mesh 12s ease infinite alternate; transition: background 0.4s ease;
+            padding: 0 8% 10vh; position: relative; overflow: hidden;
+            background: var(--bg); transition: background 0.4s ease;
         }
+        #meshCanvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.5; }
+        .hero > *:not(#meshCanvas) { position: relative; z-index: 1; }
         @keyframes mesh { 0% { background-position: 0% 0%; } 100% { background-position: 15% 15%; } }
 
         .hero-sub { font-size: clamp(1.2rem, 2.5vw, 2rem); color: var(--muted); margin-bottom: 1.5rem; letter-spacing: -0.02em; max-width: 800px; }
@@ -176,6 +176,34 @@
         .social-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: border-color 0.3s, color 0.3s, transform 0.2s; }
         .social-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
         .footer-copy { color: var(--muted); font-size: 0.9rem; }
+        .footer-hint { color: var(--muted); font-size: 0.75rem; opacity: 0.35; margin-top: 8px; font-family: 'Courier New', monospace; letter-spacing: 0.05em; }
+
+        /* Glitch */
+        @keyframes glitch-1 { 0%,100%{clip-path:inset(0 0 95% 0);transform:translate(-3px,0)} 50%{transform:translate(3px,0)} }
+        @keyframes glitch-2 { 0%,100%{clip-path:inset(40% 0 40% 0);transform:translate(3px,0)} 50%{transform:translate(-3px,0)} }
+        @keyframes glitch-3 { 0%,100%{clip-path:inset(80% 0 5% 0);transform:translate(-2px,0)} 50%{transform:translate(2px,0)} }
+        .glitching { position: relative; }
+        .glitching::before, .glitching::after { content: attr(data-text); position: absolute; inset: 0; }
+        .glitching::before { color: #ff004f; animation: glitch-1 0.12s steps(1) infinite; }
+        .glitching::after  { color: #00eeff; animation: glitch-2 0.12s steps(1) 0.04s infinite; }
+
+        /* Terminal */
+        #terminalOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 9000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        #terminalOverlay.active { opacity: 1; pointer-events: all; }
+        #terminalBox { background: #0d0d0f; border: 1px solid rgba(255,204,0,0.3); border-radius: 16px; width: min(760px, 92vw); max-height: 80vh; display: flex; flex-direction: column; box-shadow: 0 0 60px rgba(255,204,0,0.08); overflow: hidden; }
+        .term-bar { background: #1a1a1c; padding: 14px 20px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); flex-shrink: 0; }
+        .term-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .term-title { color: rgba(255,255,255,0.4); font-size: 0.8rem; font-family: monospace; margin-left: auto; margin-right: auto; }
+        #termOutput { flex: 1; overflow-y: auto; padding: 24px; font-family: 'Courier New', monospace; font-size: 0.88rem; line-height: 1.8; color: #e0e0e0; }
+        #termOutput::-webkit-scrollbar { width: 4px; }
+        #termOutput::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        .term-line { display: block; white-space: pre-wrap; }
+        .term-green { color: #22c55e; }
+        .term-yellow { color: #ffcc00; }
+        .term-muted  { color: #555; }
+        .term-input-row { display: flex; align-items: center; padding: 12px 24px 20px; gap: 8px; border-top: 1px solid rgba(255,255,255,0.06); flex-shrink: 0; }
+        .term-prompt { color: #22c55e; font-family: monospace; font-size: 0.88rem; white-space: nowrap; }
+        #termInput { flex: 1; background: none; border: none; outline: none; color: #ffcc00; font-family: 'Courier New', monospace; font-size: 0.88rem; caret-color: #ffcc00; }
 
         @media (max-width: 768px) {
             .hero { justify-content: center; padding-top: 120px; padding-bottom: 60px; }
@@ -208,8 +236,9 @@
     </nav>
 
     <div class="hero">
+        <canvas id="meshCanvas"></canvas>
         <div class="hero-sub reveal">Open to Strategic IT & Infrastructure Opportunities. Building reliable systems from bare metal up.</div>
-        <h1 class="reveal">Safwan<br>Katharudheen</h1>
+        <h1 class="reveal" id="heroName">Safwan<br>Katharudheen</h1>
     </div>
 
     <section id="about">
@@ -329,7 +358,25 @@
             </a>
         </div>
         <p class="footer-copy">&copy; 2026 Safwan Katharudheen. Built with focus on performance and privacy.</p>
+        <p class="footer-hint">// try sudo</p>
     </footer>
+
+    <!-- Terminal Easter Egg -->
+    <div id="terminalOverlay">
+        <div id="terminalBox">
+            <div class="term-bar">
+                <div class="term-dot" style="background:#ff5f57"></div>
+                <div class="term-dot" style="background:#ffbd2e"></div>
+                <div class="term-dot" style="background:#28c840"></div>
+                <span class="term-title">safwan@homelab — bash</span>
+            </div>
+            <div id="termOutput"></div>
+            <div class="term-input-row">
+                <span class="term-prompt">root@safwan:~$&nbsp;</span>
+                <input id="termInput" type="text" autocomplete="off" spellcheck="false" placeholder="type a command...">
+            </div>
+        </div>
+    </div>
 
     <script>
         // Optimized Cursor Glow
@@ -353,7 +400,209 @@
         });
         window.addEventListener("scroll", reveal); reveal();
 
-        // Optimized Theme Toggle
+        // ── Dot Grid ───────────────────────────────────────────────
+        (function() {
+            const canvas = document.getElementById('meshCanvas');
+            const ctx = canvas.getContext('2d');
+            let W, H;
+            const SPACING = 36;
+            const RADIUS = 1.6;
+            const INFLUENCE = 140;
+            const MAX_SHIFT = 28;
+            let mouse = { x: -9999, y: -9999 };
+
+            function resize() {
+                W = canvas.width  = canvas.offsetWidth;
+                H = canvas.height = canvas.offsetHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            document.addEventListener('mousemove', e => {
+                const r = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - r.left;
+                mouse.y = e.clientY - r.top;
+            });
+            document.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
+
+            function draw() {
+                ctx.clearRect(0, 0, W, H);
+                const isDark = document.body.classList.contains('dark-theme');
+                const baseColor = isDark ? 'rgba(255,255,255,' : 'rgba(0,0,0,';
+                const accentColor = 'rgba(255,204,0,';
+
+                const cols = Math.ceil(W / SPACING) + 1;
+                const rows = Math.ceil(H / SPACING) + 1;
+
+                for (let i = 0; i < cols; i++) {
+                    for (let j = 0; j < rows; j++) {
+                        const ox = i * SPACING;
+                        const oy = j * SPACING;
+                        const dx = ox - mouse.x;
+                        const dy = oy - mouse.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        const pull = Math.max(0, 1 - dist / INFLUENCE);
+
+                        // Dots shift away from cursor
+                        const shift = pull * MAX_SHIFT;
+                        const angle = Math.atan2(dy, dx);
+                        const x = ox + Math.cos(angle) * shift;
+                        const y = oy + Math.sin(angle) * shift;
+
+                        // Dots near cursor glow yellow
+                        const alpha = 0.15 + pull * 0.65;
+                        ctx.fillStyle = pull > 0.15
+                            ? `${accentColor}${alpha})`
+                            : `${baseColor}${0.18})`;
+
+                        const r = RADIUS + pull * 2.5;
+                        ctx.beginPath();
+                        ctx.arc(x, y, r, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+                requestAnimationFrame(draw);
+            }
+            requestAnimationFrame(draw);
+        })();
+
+        // ── Glitch Effect ─────────────────────────────────────────
+        (function() {
+            const el = document.getElementById('heroName');
+            el.setAttribute('data-text', el.innerText);
+            function triggerGlitch() {
+                el.classList.add('glitching');
+                setTimeout(() => el.classList.remove('glitching'), 400);
+                setTimeout(triggerGlitch, 30000 + Math.random() * 20000);
+            }
+            setTimeout(triggerGlitch, 8000 + Math.random() * 6000);
+        })();
+
+        // ── Terminal Easter Egg ───────────────────────────────────
+        (function() {
+            const overlay  = document.getElementById('terminalOverlay');
+            const output   = document.getElementById('termOutput');
+            const input    = document.getElementById('termInput');
+            let booted     = false;
+            let history    = [];
+            let histIdx    = -1;
+
+            const BOOT = [
+                { t: 0,    text: 'BIOS v2.4.1 — Safwan Homelab Systems',       cls: 'term-muted' },
+                { t: 300,  text: 'Initialising hardware...',                    cls: 'term-muted' },
+                { t: 700,  text: '✓ CPU: AMD Ryzen 9 5900X (12C/24T)',          cls: 'term-green' },
+                { t: 900,  text: '✓ RAM: 64GB DDR4-3600',                       cls: 'term-green' },
+                { t: 1100, text: '✓ Storage: 4TB NVMe + 24TB ZFS pool',         cls: 'term-green' },
+                { t: 1400, text: '✓ Network: 2.5GbE — pfSense firewall online', cls: 'term-green' },
+                { t: 1700, text: 'Loading Proxmox VE 8.1...',                   cls: 'term-muted' },
+                { t: 2100, text: '✓ 14 VMs active  |  9 LXC containers running',cls: 'term-green' },
+                { t: 2500, text: '✓ TrueNAS SCALE — all pools healthy',         cls: 'term-green' },
+                { t: 2800, text: '✓ Tailscale mesh — 6 nodes connected',        cls: 'term-green' },
+                { t: 3200, text: '✓ Grafana dashboards — uptime 99.97%',        cls: 'term-green' },
+                { t: 3600, text: '',                                             cls: '' },
+                { t: 3700, text: 'Access granted. Welcome, root.',               cls: 'term-yellow' },
+                { t: 4000, text: 'Type  help  for available commands.',          cls: 'term-muted' },
+                { t: 4100, text: '',                                             cls: '' },
+            ];
+
+            const COMMANDS = {
+                help:   () => `Available commands:\n  whoami    uptime    ls    cat /etc/motd\n  ps        ping      neofetch  clear    exit`,
+                whoami: () => `root\n(you found a hidden terminal — well played)`,
+                uptime: () => `up 847 days, 3 hours, 12 minutes\nload average: 0.42, 0.38, 0.35`,
+                ls:     () => `drwxr-xr-x  proxmox/\ndrwxr-xr-x  truenas/\ndrwxr-xr-x  pfsense/\ndrwxr-xr-x  docker/\n-rw-r--r--  README.md\n-rwx------  deploy.sh`,
+                'cat /etc/motd': () => `┌─────────────────────────────────────────┐\n│   safwan.online — homelab edition       │\n│   Built from scratch. Runs on curiosity.│\n└─────────────────────────────────────────┘`,
+                ps:     () => `PID   NAME\n1     proxmoxd\n212   truenas-api\n389   pfsense-dhcpd\n401   grafana\n512   jellyfin\n601   nextcloud\n744   vaultwarden`,
+                ping:   () => `PING safwan.online (188.245.x.x)\n64 bytes: icmp_seq=1 ttl=64 time=1.2 ms\n64 bytes: icmp_seq=2 ttl=64 time=0.9 ms\n64 bytes: icmp_seq=3 ttl=64 time=1.1 ms\n— 3 packets, 0% loss`,
+                neofetch: () => `        ___           safwan@homelab\n       /\\  \\          ─────────────\n      /  \\  \\         OS: Proxmox VE 8.1\n     / /\\ \\  \\        Kernel: 6.5.13-3-pve\n    / /  \\ \\  \\       CPU: Ryzen 9 5900X\n   / /    \\ \\  \\      RAM: 48GB / 64GB\n  /_/      \\_\\  \\     Storage: 4TB NVMe\n  \\_\\       \\_\\/      Uptime: 847 days`,
+                clear:  () => { output.innerHTML = ''; return null; },
+                exit:   () => { setTimeout(closeTerminal, 300); return 'Closing session...'; },
+            };
+
+            function print(text, cls = '') {
+                const span = document.createElement('span');
+                span.className = 'term-line ' + cls;
+                span.textContent = text;
+                output.appendChild(span);
+                output.scrollTop = output.scrollHeight;
+            }
+
+            function boot() {
+                booted = false;
+                output.innerHTML = '';
+                BOOT.forEach(({ t, text, cls }) => {
+                    setTimeout(() => {
+                        print(text, cls);
+                        if (t === 4100) { booted = true; input.focus(); }
+                    }, t);
+                });
+            }
+
+            function openTerminal() {
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                if (!booted) boot();
+                else input.focus();
+            }
+
+            function closeTerminal() {
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            // Close on backdrop click
+            overlay.addEventListener('click', e => { if (e.target === overlay) closeTerminal(); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('active')) closeTerminal(); });
+
+            // Command input
+            input.addEventListener('keydown', e => {
+                if (e.key === 'Enter') {
+                    const cmd = input.value.trim().toLowerCase();
+                    if (!cmd) return;
+                    history.unshift(cmd);
+                    histIdx = -1;
+                    print(`root@safwan:~$ ${cmd}`, 'term-yellow');
+                    const fn = COMMANDS[cmd];
+                    if (fn) {
+                        const result = fn();
+                        if (result !== null && result !== undefined) print(result);
+                    } else {
+                        print(`bash: ${cmd}: command not found`, 'term-muted');
+                    }
+                    print('');
+                    input.value = '';
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (histIdx < history.length - 1) input.value = history[++histIdx];
+                } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    input.value = histIdx > 0 ? history[--histIdx] : (histIdx = -1, '');
+                }
+            });
+
+            // sudo listener — capture keystrokes globally
+            let buffer = '';
+            document.addEventListener('keydown', e => {
+                if (overlay.classList.contains('active')) return;
+                buffer += e.key.toLowerCase();
+                buffer = buffer.slice(-6);
+                if (buffer.endsWith('sudo')) openTerminal();
+            });
+        })();
+
+        // ── Magnetic Buttons ──────────────────────────────────────
+        document.querySelectorAll('.btn-primary, .btn-secondary, .social-btn').forEach(btn => {
+            btn.addEventListener('mousemove', e => {
+                const r = btn.getBoundingClientRect();
+                const x = e.clientX - r.left - r.width  / 2;
+                const y = e.clientY - r.top  - r.height / 2;
+                btn.style.transform = `translate(${x * 0.35}px, ${y * 0.45}px) scale(1.06)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = '';
+                btn.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+                setTimeout(() => btn.style.transition = '', 500);
+            });
+        });
         const themeBtn = document.getElementById('themeToggle'), themeIcon = document.getElementById('themeIcon');
         const svgs = {
             sun: '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>',
