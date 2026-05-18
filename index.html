@@ -6,7 +6,7 @@
     <title>Safwan Katharudheen | Systems Engineer</title>
 
     <meta name="description" content="Safwan Katharudheen — Systems Engineer specialising in IT infrastructure, virtualisation, networking, and self-hosted homelab systems. Open to strategic IT & infrastructure roles.">
-    <meta name="keywords" content="Safwan Katharudheen, Systems Engineer, IT Infrastructure, Proxmox, TrueNAS, pfSense, Homelab, Networking, Virtualisation, IT Admin">
+    <meta name="keywords" content="Safwan Katharudheen, Systems Engineer, IT Infrastructure, Proxmox, TrueNAS, pfSense, Homelab, Networking, Virtualisation, IT Admin, 3D Printing">
     <meta name="author" content="Safwan Katharudheen">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://safwan.online/">
@@ -24,19 +24,6 @@
     <meta name="twitter:title" content="Safwan Katharudheen | Systems Engineer">
     <meta name="twitter:description" content="Building reliable systems from bare metal up. Specialising in IT infrastructure, virtualisation, networking, and homelabs.">
     <meta name="twitter:image" content="https://safwan.online/preview.png">
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Safwan Katharudheen",
-      "url": "https://safwan.online",
-      "jobTitle": "Systems Engineer",
-      "description": "Systems Engineer specialising in IT infrastructure, virtualisation, networking, and self-hosted homelab systems.",
-      "email": "safwxn@proton.me",
-      "knowsAbout": ["Proxmox", "TrueNAS", "pfSense", "Linux", "Networking", "Virtualisation", "Docker", "Active Directory"]
-    }
-    </script>
 
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/favicon.png">
@@ -59,9 +46,6 @@
             --contact-text: #f5f0e8;
             --glow: radial-gradient(circle, rgba(255, 180, 0, 0.18) 0%, transparent 70%);
             --accent: #e6a800;
-            --mesh-1: rgba(255, 190, 0, 0.14);
-            --mesh-2: rgba(139, 111, 255, 0.10);
-            --mesh-3: rgba(29, 233, 216, 0.07);
         }
 
         body.dark-theme {
@@ -93,7 +77,7 @@
             background: var(--glow); border-radius: 50%;
             pointer-events: none; z-index: 9999;
             will-change: transform;
-            transform: translate(-50%, -50%); /* Hidden initially */
+            transform: translate(-50%, -50%);
         }
 
         nav {
@@ -118,7 +102,6 @@
         }
         #meshCanvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.5; }
         .hero > *:not(#meshCanvas) { position: relative; z-index: 1; }
-        @keyframes mesh { 0% { background-position: 0% 0%; } 100% { background-position: 15% 15%; } }
 
         .hero-sub { font-size: clamp(1.2rem, 2.5vw, 2rem); color: var(--muted); margin-bottom: 1.5rem; letter-spacing: -0.02em; max-width: 800px; }
         .hero h1 { font-size: clamp(4rem, 13vw, 11rem); font-weight: 800; letter-spacing: -0.05em; line-height: 0.85; margin-left: -0.05em; }
@@ -150,6 +133,10 @@
         .modal-container::-webkit-scrollbar { width: 8px; }
         .modal-container::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 10px; opacity: 0.5; }
 
+        .printing-banner { background: var(--card-bg); padding: 80px 8%; text-align: center; border-top: 1px solid var(--card-border); transition: background 0.4s ease; }
+        .printing-banner h2 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 20px; }
+        .printing-banner p { color: var(--muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto 35px; line-height: 1.6; }
+        
         #contact { background: var(--contact-bg); color: var(--contact-text); padding: 150px 8%; text-align: center; transition: background 0.4s ease, color 0.4s ease; }
         .status-ping { display: inline-flex; align-items: center; color: var(--muted); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
         .ping-dot { width: 10px; height: 10px; background: #22c55e; border-radius: 50%; margin-right: 10px; position: relative; }
@@ -158,7 +145,7 @@
 
         .contact-title { font-size: clamp(3rem, 8vw, 6rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 50px; }
         .contact-actions { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .btn-primary, .btn-secondary { display: inline-block; padding: 20px 40px; border-radius: 999px; text-decoration: none; font-size: 1.2rem; font-weight: 700; transition: transform 0.2s; }
+        .btn-primary, .btn-secondary { display: inline-block; padding: 20px 40px; border-radius: 999px; text-decoration: none; font-size: 1.2rem; font-weight: 700; transition: transform 0.2s; border: none; cursor: pointer; }
         .btn-primary { background: var(--btn-bg); color: #000; }
         .btn-secondary { border: 1px solid rgba(255,255,255,0.2); color: var(--contact-text); }
         .btn-primary:hover, .btn-secondary:hover { transform: scale(1.03); }
@@ -176,7 +163,6 @@
         /* Glitch */
         @keyframes glitch-1 { 0%,100%{clip-path:inset(0 0 95% 0);transform:translate(-3px,0)} 50%{transform:translate(3px,0)} }
         @keyframes glitch-2 { 0%,100%{clip-path:inset(40% 0 40% 0);transform:translate(3px,0)} 50%{transform:translate(-3px,0)} }
-        @keyframes glitch-3 { 0%,100%{clip-path:inset(80% 0 5% 0);transform:translate(-2px,0)} 50%{transform:translate(2px,0)} }
         .glitching { position: relative; }
         .glitching::before, .glitching::after { content: attr(data-text); position: absolute; inset: 0; }
         .glitching::before { color: #ff004f; animation: glitch-1 0.12s steps(1) infinite; }
@@ -235,9 +221,32 @@
             }
 
             .grid { grid-template-columns: 1fr; }
-            nav { width: 92%; justify-content: space-around; top: 15px; }
-            nav a { padding: 8px 10px; font-size: 0.75rem; }
+            
+            /* --- FIXED MOBILE NAV BAR --- */
+            nav { 
+                width: 94%; 
+                padding: 6px 10px; /* Reduced vertical padding */
+                justify-content: center; 
+                gap: 4px;
+                top: 15px; 
+            }
+            nav a { 
+                padding: 6px 8px; /* Tighter links */
+                font-size: 0.75rem; 
+                letter-spacing: -0.02em; /* Shrinks word width slightly */
+            }
+            .theme-toggle { 
+                padding: 4px; /* Smaller button footprint */
+                margin-left: 2px; 
+            }
+            .theme-toggle svg { 
+                width: 16px; 
+                height: 16px; 
+            }
+            /* ----------------------------- */
+
             .card { padding: 30px; }
+            .printing-banner { padding: 60px 5%; }
             .contact-actions { flex-direction: column; }
             .btn-primary, .btn-secondary { width: 100%; }
             .modal-container { padding: 40px 20px; }
@@ -365,6 +374,12 @@
         </div>
     </div>
 
+    <section class="printing-banner reveal">
+        <h2>Have an idea? Let's 3D print it.</h2>
+        <p>From custom CAD modeling to high-quality physical prints, I can help bring your digital concepts into the real world.</p>
+        <a href="https://wa.me/917012304907?text=Hi%20,%20i%20am%20looking%20for%203d%20printing%20service" target="_blank" class="btn-primary" style="background: var(--accent); color: #000;">Request 3D Printing →</a>
+    </section>
+
     <section id="contact">
         <div class="status-ping reveal"><span class="ping-dot"></span> Available for new projects</div>
         <h2 class="contact-title reveal">Let's build something reliable.</h2>
@@ -471,13 +486,11 @@
                         const dist = Math.sqrt(dx * dx + dy * dy);
                         const pull = Math.max(0, 1 - dist / INFLUENCE);
 
-                        // Dots shift away from cursor
                         const shift = pull * MAX_SHIFT;
                         const angle = Math.atan2(dy, dx);
                         const x = ox + Math.cos(angle) * shift;
                         const y = oy + Math.sin(angle) * shift;
 
-                        // Dots near cursor glow yellow
                         const alpha = 0.15 + pull * 0.65;
                         ctx.fillStyle = pull > 0.15
                             ? `${accentColor}${alpha})`
@@ -497,13 +510,15 @@
         // ── Glitch Effect ─────────────────────────────────────────
         (function() {
             const el = document.getElementById('heroName');
-            el.setAttribute('data-text', el.innerText);
-            function triggerGlitch() {
-                el.classList.add('glitching');
-                setTimeout(() => el.classList.remove('glitching'), 400);
-                setTimeout(triggerGlitch, 30000 + Math.random() * 20000);
+            if(el) {
+                el.setAttribute('data-text', el.innerText);
+                function triggerGlitch() {
+                    el.classList.add('glitching');
+                    setTimeout(() => el.classList.remove('glitching'), 400);
+                    setTimeout(triggerGlitch, 30000 + Math.random() * 20000);
+                }
+                setTimeout(triggerGlitch, 8000 + Math.random() * 6000);
             }
-            setTimeout(triggerGlitch, 8000 + Math.random() * 6000);
         })();
 
         // ── Terminal Easter Egg ───────────────────────────────────
@@ -577,11 +592,9 @@
                 document.body.style.overflow = '';
             }
 
-            // Close on backdrop click
             overlay.addEventListener('click', e => { if (e.target === overlay) closeTerminal(); });
             document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('active')) closeTerminal(); });
 
-            // Command input
             input.addEventListener('keydown', e => {
                 if (e.key === 'Enter') {
                     const cmd = input.value.trim().toLowerCase();
@@ -607,7 +620,6 @@
                 }
             });
 
-            // sudo listener — capture keystrokes globally
             let buffer = '';
             document.addEventListener('keydown', e => {
                 if (overlay.classList.contains('active')) return;
@@ -631,6 +643,8 @@
                 setTimeout(() => btn.style.transition = '', 500);
             });
         });
+
+        // ── Theme Toggle ──────────────────────────────────────
         const themeBtn = document.getElementById('themeToggle'), themeIcon = document.getElementById('themeIcon');
         const svgs = {
             sun: '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>',
