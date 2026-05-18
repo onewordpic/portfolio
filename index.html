@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Safwan Katharudheen | Systems Engineer</title>
 
-    <!-- Primary SEO -->
     <meta name="description" content="Safwan Katharudheen — Systems Engineer specialising in IT infrastructure, virtualisation, networking, and self-hosted homelab systems. Open to strategic IT & infrastructure roles.">
     <meta name="keywords" content="Safwan Katharudheen, Systems Engineer, IT Infrastructure, Proxmox, TrueNAS, pfSense, Homelab, Networking, Virtualisation, IT Admin">
     <meta name="author" content="Safwan Katharudheen">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://safwan.online/">
 
-    <!-- Open Graph (LinkedIn, WhatsApp, Facebook previews) -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://safwan.online/">
     <meta property="og:title" content="Safwan Katharudheen | Systems Engineer">
@@ -21,14 +19,12 @@
     <meta property="og:site_name" content="Safwan Katharudheen">
     <meta property="og:locale" content="en_US">
 
-    <!-- Twitter / X Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://safwan.online/">
     <meta name="twitter:title" content="Safwan Katharudheen | Systems Engineer">
     <meta name="twitter:description" content="Building reliable systems from bare metal up. Specialising in IT infrastructure, virtualisation, networking, and homelabs.">
     <meta name="twitter:image" content="https://safwan.online/preview.png">
 
-    <!-- Structured Data (Google Rich Results) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -42,7 +38,6 @@
     }
     </script>
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/favicon.png">
 
@@ -207,7 +202,38 @@
 
         @media (max-width: 768px) {
             .hero { justify-content: center; padding-top: 120px; padding-bottom: 60px; }
-            .hero h1 { font-size: clamp(3.5rem, 16vw, 6rem); }
+            
+            /* Premium Staggered Mobile Reveal */
+            .hero h1 { 
+                display: flex;
+                flex-direction: column;
+                line-height: 1.1; 
+                overflow: hidden;
+            }
+            .first-name, .last-name {
+                display: block;
+                opacity: 0;
+                transform: translateY(100%);
+                animation: revealText 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+            .first-name {
+                font-size: clamp(3.5rem, 16vw, 6rem); 
+                animation-delay: 0.2s;
+            }
+            .last-name {
+                font-size: 1.1rem; 
+                font-weight: 400;
+                text-transform: uppercase;
+                letter-spacing: 0.35em;
+                color: var(--muted);
+                margin-top: 8px;
+                animation-delay: 0.4s;
+            }
+            @keyframes revealText {
+                0% { opacity: 0; transform: translateY(100%); clip-path: inset(0 0 100% 0); }
+                100% { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0 0); }
+            }
+
             .grid { grid-template-columns: 1fr; }
             nav { width: 92%; justify-content: space-around; top: 15px; }
             nav a { padding: 8px 10px; font-size: 0.75rem; }
@@ -238,7 +264,10 @@
     <div class="hero">
         <canvas id="meshCanvas"></canvas>
         <div class="hero-sub reveal">Open to Strategic IT & Infrastructure Opportunities. Building reliable systems from bare metal up.</div>
-        <h1 class="reveal" id="heroName">Safwan<br>Katharudheen</h1>
+        <h1 class="reveal" id="heroName">
+            <span class="first-name">Safwan</span>
+            <span class="last-name">Katharudheen</span>
+        </h1>
     </div>
 
     <section id="about">
@@ -361,7 +390,6 @@
         <p class="footer-hint">// try sudo</p>
     </footer>
 
-    <!-- Terminal Easter Egg -->
     <div id="terminalOverlay">
         <div id="terminalBox">
             <div class="term-bar">
