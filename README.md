@@ -8,7 +8,7 @@ Welcome to my open-source developer portfolio hub! This repository hosts the sta
 
 ### 1. [OdoLog 🚗💨](https://github.com/onewordpic/OdoLog)
 * **What it is:** A sleek, minimal web app for multi-vehicle tracking, fuel-efficiency metrics, and automated travel expense calculation.
-* **The Stack:** Bun, Vite, React, TypeScript, Supabase, Tailwind CSS, Shadcn UI.
+* **The Stack:** React, TypeScript, Supabase, Tailwind CSS.
 * **Core Highlight:** Features localized currency tracking (₹) and ultra-responsive micro-interactions built with rapid AI-accelerated velocity.
 * **Live App:** [odolog.lovable.app](https://odolog.lovable.app)
 
