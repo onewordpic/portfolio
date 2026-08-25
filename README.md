@@ -10,7 +10,7 @@ Welcome to my open-source developer portfolio hub! This repository hosts the sta
 * **What it is:** A sleek, minimal web app for multi-vehicle tracking, fuel-efficiency metrics, and automated travel expense calculation.
 * **The Stack:** React, TypeScript, Supabase, Tailwind CSS.
 * **Core Highlight:** Features localized currency tracking (₹) and ultra-responsive micro-interactions built with rapid AI-accelerated velocity.
-* **Live App:** [odolog.lovable.app](https://odolog.lovable.app)
+* **Live App:** [OdoLog](https://odolog.online)
 
 ### 2. Native macOS DNS Switcher 🍏📡
 * **What it is:** A robust desktop utility application built directly in Xcode to manipulate system network configurations on the fly.
